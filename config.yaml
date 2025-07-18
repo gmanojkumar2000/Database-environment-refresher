@@ -1,0 +1,56 @@
+# Aurora MySQL Refresh Automation Config
+source_account_id: '123456789012'
+target_account_id: '210987654321'
+region: 'us-east-1'
+
+source_db_cluster_identifier: 'prod-aurora-cluster'
+target_db_cluster_identifier: 'preprod-aurora-cluster'
+backup_db_instance_identifier: 'prod-backup-db'
+
+# DB connection info (except credentials)
+backup_db:
+  host: 'prod-backup-db.cluster-xxxxxx.us-east-1.rds.amazonaws.com'
+  port: 3306
+  dbname: 'analytics'
+
+target_db:
+  host: 'preprod-app-db.cluster-yyyyyy.us-east-1.rds.amazonaws.com'
+  port: 3306
+  dbname: 'analytics'
+
+schema_to_refresh: 'analytics_schema'
+tables_to_copy:
+  - table1
+  - table2
+  - table3
+  # or use: all
+
+row_threshold_for_mysqldump: 100000  # tables above this row count use mysqldump
+parallel_table_copies: 4  # Number of tables to copy in parallel
+
+# Logging
+log_level: INFO  # DEBUG, INFO, WARNING, ERROR
+
+# Automatic retry of failed tables
+max_failed_table_retries: 2
+
+# DMS integration (optional)
+dms:
+  enabled: false
+  replication_instance_arn: ''
+  source_endpoint_arn: ''
+  target_endpoint_arn: ''
+  migration_task_settings: ''  # Path to JSON file with DMS task settings (optional)
+  # If enabled, DMS will be used for all table copies
+
+s3_ddl_bucket: 'my-ddl-bucket'
+s3_ddl_prefix: 'ddls/analytics_schema.sql'
+
+# Infra options
+subnet_group: 'my-db-subnet-group'
+vpc_security_group_ids:
+  - 'sg-0123456789abcdef0'
+
+# Secrets Manager ARNs
+source_db_secret_arn: 'arn:aws:secretsmanager:us-east-1:123456789012:secret:prod-db-secret'
+target_db_secret_arn: 'arn:aws:secretsmanager:us-east-1:210987654321:secret:preprod-db-secret' 
