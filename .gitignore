@@ -1,0 +1,31 @@
+# Python standard ignores
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+env/
+.pytest_cache/
+
+# Logs
+*.log
+logs/
+
+# Environment & Secret patterns
+.env
+.env.*
+!.env.example
+config.local.yaml
+*.local.yaml
+*.pem
+*.key
+*secret*
+*credential*
+aws-credentials*
+
+# OS & IDE ignores
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
